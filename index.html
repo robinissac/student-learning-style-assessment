@@ -1,56 +1,616 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Genius Test</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      .fade-in {
-        animation: fadeIn 0.6s ease-in-out forwards;
-      }
-      .slide-up {
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Strengths & Learning Style Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Optional small enhancements that are easier to write here than with utility classes */
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
         opacity: 0;
-        animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        transform: translateY(4px);
       }
-      .slide-up-delay-1 { animation-delay: 0.1s; }
-      .slide-up-delay-2 { animation-delay: 0.2s; }
-      .slide-up-delay-3 { animation-delay: 0.3s; }
-      
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      
-      @media print {
-        body { -webkit-print-color-adjust: exact; }
-        .no-print { display: none !important; }
-        .page-break { page-break-before: always; }
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    }
+  </style>
 </head>
-  <body class="bg-slate-50 text-slate-900 h-screen w-screen overflow-hidden">
-    <div id="root" class="h-full w-full"></div>
-  <script type="module" src="/index.tsx"></script>
+<body class="min-h-screen bg-slate-900 text-slate-50 flex items-center justify-center px-4 py-8">
+  <div class="w-full max-w-3xl bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-6 sm:p-10">
+    <header class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+        Student Strengths & Learning Style Quiz
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base">
+        Answer a few quick questions to discover your primary strength and learning style.
+      </p>
+    </header>
+
+    <!-- Start Screen -->
+    <section id="start-screen" class="fade-in">
+      <div class="bg-slate-700/40 rounded-xl p-6 sm:p-8">
+        <h2 class="text-xl sm:text-2xl font-semibold mb-4">Welcome</h2>
+        <p class="text-slate-200 mb-4 text-sm sm:text-base">
+          This short quiz helps you understand how you learn best.
+          Your answers will reveal whether you are more of a:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-200 text-sm sm:text-base">
+          <li><span class="font-semibold">Creative Thinker</span></li>
+          <li><span class="font-semibold">Analytical Learner</span></li>
+          <li><span class="font-semibold">Collaborative Communicator</span></li>
+          <li><span class="font-semibold">Organized Executor</span></li>
+        </ul>
+        <p class="text-slate-300 mt-4 text-xs sm:text-sm">
+          There are 10 questions. Choose the option that feels most natural to you for each one.
+        </p>
+
+        <div class="mt-6 flex justify-center">
+          <button
+            id="start-btn"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-900 font-semibold text-sm sm:text-base shadow-lg hover:shadow-emerald-500/40 transition"
+          >
+            Start Quiz
+            <span aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quiz-screen" class="hidden fade-in">
+      <!-- Progress -->
+      <div class="mb-4 flex items-center justify-between text-xs sm:text-sm text-slate-300">
+        <div id="progress-text" class="font-medium"></div>
+        <div class="w-40 sm:w-56 h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-emerald-500 transition-all"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="bg-slate-700/40 rounded-xl p-6 sm:p-8">
+        <h2
+          id="question-text"
+          class="text-lg sm:text-xl font-semibold mb-6 text-slate-50"
+        ></h2>
+
+        <div id="answers-container" class="space-y-3">
+          <!-- Answer buttons will be injected here dynamically -->
+        </div>
+
+        <div class="mt-6 flex justify-between items-center text-xs sm:text-sm text-slate-400">
+          <button
+            id="back-btn"
+            class="px-3 py-2 rounded-full border border-slate-500 text-slate-200 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            ← Previous
+          </button>
+          <p class="italic">
+            Choose the option that feels most like you.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result Screen -->
+    <section id="result-screen" class="hidden fade-in">
+      <div class="bg-slate-700/40 rounded-xl p-6 sm:p-8">
+        <p class="text-xs sm:text-sm uppercase tracking-wide text-emerald-400 mb-2 font-semibold">
+          Your primary style
+        </p>
+        <h2
+          id="result-title"
+          class="text-2xl sm:text-3xl font-bold mb-2 text-emerald-300"
+        ></h2>
+        <p
+          id="result-description"
+          class="text-sm sm:text-base text-slate-100 mb-4"
+        ></p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-6 text-xs sm:text-sm text-slate-200">
+          <div class="bg-slate-800/70 rounded-lg p-4">
+            <h3 class="font-semibold mb-1 text-slate-50">Study tip for you</h3>
+            <p id="result-tip">
+              <!-- Filled by JS with a simple tip based on type -->
+            </p>
+          </div>
+          <div class="bg-slate-800/70 rounded-lg p-4">
+            <h3 class="font-semibold mb-1 text-slate-50">How to use this insight</h3>
+            <p class="text-slate-200">
+              Share this result with your teacher, mentor, or parent so that
+              they can support you with tasks that match your style.
+            </p>
+          </div>
+        </div>
+
+        <!-- Simple sharing instructions and placeholder button -->
+        <div class="mb-6">
+          <h3 class="font-semibold text-sm sm:text-base mb-2 text-slate-50">
+            Want to share your result?
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 mb-3">
+            You can take a screenshot of this page and share it, or your developer can add a social share button here.
+          </p>
+
+          <!-- This button is just a visual placeholder -->
+          <button
+            id="share-btn"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-400 text-emerald-300 text-xs sm:text-sm hover:bg-emerald-500/10 transition"
+          >
+            📤 Share result (demo)
+          </button>
+
+          <!--
+            Developer note:
+
+            To implement real sharing you could use:
+            1. The Web Share API (for mobile or supported browsers):
+
+              if (navigator.share) {
+                navigator.share({
+                  title: 'My Learning Style Result',
+                  text: 'I got "Creative Thinker" on this quiz',
+                  url: window.location.href
+                });
+              }
+
+            2. Or use a link to a social share URL, for example Twitter or WhatsApp.
+          -->
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <button
+            id="retake-btn"
+            class="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-900 font-semibold text-sm shadow-lg hover:shadow-emerald-500/40 transition"
+          >
+            Retake Quiz
+          </button>
+          <button
+            id="back-to-start-btn"
+            class="px-5 py-2.5 rounded-full border border-slate-500 text-slate-200 text-sm hover:bg-slate-700 transition"
+          >
+            Back to start
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Strength types and their descriptions
+    const strengthTypes = {
+      creative: {
+        name: "Creative Thinker",
+        description:
+          "Focuses on generating new ideas and innovative solutions.",
+        tip:
+          "Use mind maps, brainstorming, and visual notes. Turn concepts into sketches, diagrams, or stories."
+      },
+      analytical: {
+        name: "Analytical Learner",
+        description:
+          "Thrives on understanding details, data, and logical processes.",
+        tip:
+          "Break big problems into smaller steps. Use checklists, worked examples, and practice questions."
+      },
+      collaborative: {
+        name: "Collaborative Communicator",
+        description:
+          "Excels in teamwork, leadership, and interpersonal communication.",
+        tip:
+          "Study with friends, discuss concepts, and explain topics to others to deepen understanding."
+      },
+      organized: {
+        name: "Organized Executor",
+        description:
+          "Detail oriented, skilled at planning, timing, and completing tasks.",
+        tip:
+          "Use planners, to do lists, and clear timelines. Set small deadlines and track your progress."
+      }
+    };
+
+    // Placeholder questions (10 total)
+    // Each option maps to one of the strength types
+    const questions = [
+      {
+        text: "When you start a new school project, what excites you the most?",
+        options: [
+          {
+            text: "Thinking of unique and creative ideas for the project",
+            type: "creative"
+          },
+          {
+            text: "Researching facts, data, and how things work",
+            type: "analytical"
+          },
+          {
+            text: "Planning it with classmates and sharing tasks",
+            type: "collaborative"
+          },
+          {
+            text: "Organizing the steps, timeline, and materials needed",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "In class, you remember best when the teacher",
+        options: [
+          {
+            text: "Uses pictures, stories, or creative activities",
+            type: "creative"
+          },
+          {
+            text: "Explains each step in detail with clear logic",
+            type: "analytical"
+          },
+          {
+            text: "Encourages group discussions and presentations",
+            type: "collaborative"
+          },
+          {
+            text: "Gives structured notes, summaries, and routines",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "When you face a difficult problem, you usually",
+        options: [
+          {
+            text: "Look for a new or unusual way to solve it",
+            type: "creative"
+          },
+          {
+            text: "Analyze the problem slowly and carefully",
+            type: "analytical"
+          },
+          {
+            text: "Ask others what they think and talk it through",
+            type: "collaborative"
+          },
+          {
+            text: "Make a mini plan and solve it step by step",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "Which activity sounds most fun to you?",
+        options: [
+          {
+            text: "Designing posters, comics, or videos",
+            type: "creative"
+          },
+          {
+            text: "Solving puzzles, math problems, or quizzes",
+            type: "analytical"
+          },
+          {
+            text: "Leading a group game or class presentation",
+            type: "collaborative"
+          },
+          {
+            text: "Setting up a schedule for your day or week",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "Your teacher gives a long homework assignment. You first",
+        options: [
+          {
+            text: "Think of a fun or creative way to complete it",
+            type: "creative"
+          },
+          {
+            text: "Read the instructions carefully and plan how to do it",
+            type: "analytical"
+          },
+          {
+            text: "Ask your friends how they are going to do it",
+            type: "collaborative"
+          },
+          {
+            text: "Split it into smaller tasks and set times for each",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "In a group project, other people usually see you as the one who",
+        options: [
+          {
+            text: "Brings fresh ideas and artistic touches",
+            type: "creative"
+          },
+          {
+            text: "Checks facts and makes sure things are correct",
+            type: "analytical"
+          },
+          {
+            text: "Keeps everyone talking, involved, and motivated",
+            type: "collaborative"
+          },
+          {
+            text: "Keeps track of deadlines and who does what",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "When studying for a test, you prefer to",
+        options: [
+          {
+            text: "Use colors, diagrams, or creative notes",
+            type: "creative"
+          },
+          {
+            text: "Practice problems and understand reasons behind answers",
+            type: "analytical"
+          },
+          {
+            text: "Study with a partner and quiz each other",
+            type: "collaborative"
+          },
+          {
+            text: "Create a study timetable and follow it",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "If you could design your perfect classroom, it would",
+        options: [
+          {
+            text: "Have art corners, idea walls, and creative spaces",
+            type: "creative"
+          },
+          {
+            text: "Have clear charts, models, and reference materials",
+            type: "analytical"
+          },
+          {
+            text: "Have circular seating to talk and work in teams",
+            type: "collaborative"
+          },
+          {
+            text: "Have labeled shelves, clear rules, and tidy spaces",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "When instructions are confusing, you usually",
+        options: [
+          {
+            text: "Try to reimagine or rephrase them in your own way",
+            type: "creative"
+          },
+          {
+            text: "Ask for a step by step explanation",
+            type: "analytical"
+          },
+          {
+            text: "Discuss them with classmates to understand",
+            type: "collaborative"
+          },
+          {
+            text: "Write them down in order until they look clear",
+            type: "organized"
+          }
+        ]
+      },
+      {
+        text: "Which compliment would make you happiest?",
+        options: [
+          {
+            text: "You have such amazing ideas",
+            type: "creative"
+          },
+          {
+            text: "You understand things very deeply",
+            type: "analytical"
+          },
+          {
+            text: "You work with others so well",
+            type: "collaborative"
+          },
+          {
+            text: "You are very reliable and organized",
+            type: "organized"
+          }
+        ]
+      }
+    ];
+
+    // State
+    let currentQuestionIndex = 0;
+    let scores = {
+      creative: 0,
+      analytical: 0,
+      collaborative: 0,
+      organized: 0
+    };
+
+    // Elements
+    const startScreen = document.getElementById("start-screen");
+    const quizScreen = document.getElementById("quiz-screen");
+    const resultScreen = document.getElementById("result-screen");
+
+    const startBtn = document.getElementById("start-btn");
+    const backBtn = document.getElementById("back-btn");
+
+    const progressText = document.getElementById("progress-text");
+    const progressBar = document.getElementById("progress-bar");
+
+    const questionText = document.getElementById("question-text");
+    const answersContainer = document.getElementById("answers-container");
+
+    const resultTitle = document.getElementById("result-title");
+    const resultDescription = document.getElementById("result-description");
+    const resultTip = document.getElementById("result-tip");
+
+    const retakeBtn = document.getElementById("retake-btn");
+    const backToStartBtn = document.getElementById("back-to-start-btn");
+    const shareBtn = document.getElementById("share-btn");
+
+    function resetScores() {
+      scores = {
+        creative: 0,
+        analytical: 0,
+        collaborative: 0,
+        organized: 0
+      };
+    }
+
+    function showScreen(screen) {
+      startScreen.classList.add("hidden");
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+
+      screen.classList.remove("hidden");
+    }
+
+    function startQuiz() {
+      resetScores();
+      currentQuestionIndex = 0;
+      showScreen(quizScreen);
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const total = questions.length;
+      const current = currentQuestionIndex + 1;
+      const q = questions[currentQuestionIndex];
+
+      progressText.textContent = "Question " + current + " of " + total;
+
+      // Update progress bar width
+      const percent = (currentQuestionIndex / total) * 100;
+      progressBar.style.width = percent + "%";
+
+      questionText.textContent = q.text;
+
+      // Clear previous answers
+      answersContainer.innerHTML = "";
+
+      q.options.forEach(function (option, index) {
+        const btn = document.createElement("button");
+        btn.className =
+          "w-full text-left px-4 py-3 rounded-lg border border-slate-500 bg-slate-800/80 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm sm:text-base transition";
+        btn.textContent = option.text;
+        btn.dataset.type = option.type;
+
+        btn.addEventListener("click", function () {
+          handleAnswer(option.type);
+        });
+
+        answersContainer.appendChild(btn);
+      });
+
+      // Back button disabled on first question
+      backBtn.disabled = currentQuestionIndex === 0;
+    }
+
+    function handleAnswer(type) {
+      // Increase score for chosen type
+      scores[type] += 1;
+
+      // Move to next question or finish
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex += 1;
+        renderQuestion();
+      } else {
+        // Set progress bar to 100 percent at the end
+        progressBar.style.width = "100%";
+        showResults();
+      }
+    }
+
+    function goBack() {
+      if (currentQuestionIndex === 0) {
+        return;
+      }
+
+      // Optional: You could track answers history to fully adjust scores when going back.
+      // Simplest version: just move back without changing scores.
+      // For more accuracy, store chosen answers in an array and subtract the score when moving back.
+
+      currentQuestionIndex -= 1;
+      renderQuestion();
+    }
+
+    function showResults() {
+      const resultTypeKey = calculateResultType();
+      const resultData = strengthTypes[resultTypeKey];
+
+      resultTitle.textContent = resultData.name;
+      resultDescription.textContent = resultData.description;
+      resultTip.textContent = resultData.tip;
+
+      showScreen(resultScreen);
+    }
+
+    function calculateResultType() {
+      // Tie rule: show the first type that reaches the highest score based on this order
+      const order = ["creative", "analytical", "collaborative", "organized"];
+      let bestType = order[0];
+      let bestScore = scores[bestType];
+
+      order.forEach(function (type) {
+        if (scores[type] > bestScore) {
+          bestType = type;
+          bestScore = scores[type];
+        }
+      });
+
+      return bestType;
+    }
+
+    function retakeQuiz() {
+      startQuiz();
+    }
+
+    function backToStart() {
+      showScreen(startScreen);
+    }
+
+    function shareResultDemo() {
+      const resultTypeKey = calculateResultType();
+      const resultData = strengthTypes[resultTypeKey];
+
+      const shareText =
+        "My learning style result: " +
+        resultData.name +
+        " - " +
+        resultData.description;
+
+      // This is just a demo. In a real app you would call navigator.share or open a social share link.
+      alert(
+        "Example share text:\n\n" +
+          shareText +
+          "\n\nYour developer can connect this button to real social sharing."
+      );
+    }
+
+    // Event listeners
+    startBtn.addEventListener("click", startQuiz);
+    backBtn.addEventListener("click", goBack);
+    retakeBtn.addEventListener("click", retakeQuiz);
+    backToStartBtn.addEventListener("click", backToStart);
+    shareBtn.addEventListener("click", shareResultDemo);
+  </script>
 </body>
 </html>
