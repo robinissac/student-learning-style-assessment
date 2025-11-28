@@ -1,16 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Student Strengths & Learning Style Quiz</title>
+  <title>Project Manager Strengths & Learning Style Quiz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Optional small enhancements that are easier to write here than with utility classes */
     .fade-in {
       animation: fadeIn 0.3s ease-in-out;
     }
@@ -31,29 +29,29 @@
   <div class="w-full max-w-3xl bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-6 sm:p-10">
     <header class="text-center mb-8">
       <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-        Student Strengths & Learning Style Quiz
+        Project Manager Strengths & Learning Style Quiz
       </h1>
       <p class="text-slate-300 text-sm sm:text-base">
-        Answer a few quick questions to discover your primary strength and learning style.
+        Discover how you naturally lead, learn, and deliver projects, so you can design a learning path that fits you.
       </p>
     </header>
 
     <!-- Start Screen -->
     <section id="start-screen" class="fade-in">
       <div class="bg-slate-700/40 rounded-xl p-6 sm:p-8">
-        <h2 class="text-xl sm:text-2xl font-semibold mb-4">Welcome</h2>
+        <h2 class="text-xl sm:text-2xl font-semibold mb-4">Welcome, Project Leader</h2>
         <p class="text-slate-200 mb-4 text-sm sm:text-base">
-          This short quiz helps you understand how you learn best.
-          Your answers will reveal whether you are more of a:
+          This quick assessment helps you identify your dominant delivery and learning style as a project manager.
+          Your profile will lean toward one of these types:
         </p>
         <ul class="list-disc list-inside space-y-1 text-slate-200 text-sm sm:text-base">
-          <li><span class="font-semibold">Creative Thinker</span></li>
-          <li><span class="font-semibold">Analytical Learner</span></li>
-          <li><span class="font-semibold">Collaborative Communicator</span></li>
-          <li><span class="font-semibold">Organized Executor</span></li>
+          <li><span class="font-semibold">Creative Thinker</span> - innovation and vision</li>
+          <li><span class="font-semibold">Analytical Learner</span> - structure and data</li>
+          <li><span class="font-semibold">Collaborative Communicator</span> - people and influence</li>
+          <li><span class="font-semibold">Organized Executor</span> - planning and closure</li>
         </ul>
         <p class="text-slate-300 mt-4 text-xs sm:text-sm">
-          There are 10 questions. Choose the option that feels most natural to you for each one.
+          There are 10 scenario based questions. Choose the option that best matches how you usually behave in real projects.
         </p>
 
         <div class="mt-6 flex justify-center">
@@ -86,7 +84,7 @@
         ></h2>
 
         <div id="answers-container" class="space-y-3">
-          <!-- Answer buttons will be injected here dynamically -->
+          <!-- Answer buttons injected by JS -->
         </div>
 
         <div class="mt-6 flex justify-between items-center text-xs sm:text-sm text-slate-400">
@@ -97,7 +95,7 @@
             ← Previous
           </button>
           <p class="italic">
-            Choose the option that feels most like you.
+            Answer based on how you usually work, not how you think you should work.
           </p>
         </div>
       </div>
@@ -107,7 +105,7 @@
     <section id="result-screen" class="hidden fade-in">
       <div class="bg-slate-700/40 rounded-xl p-6 sm:p-8">
         <p class="text-xs sm:text-sm uppercase tracking-wide text-emerald-400 mb-2 font-semibold">
-          Your primary style
+          Your dominant style as a project manager
         </p>
         <h2
           id="result-title"
@@ -120,16 +118,14 @@
 
         <div class="grid sm:grid-cols-2 gap-4 mb-6 text-xs sm:text-sm text-slate-200">
           <div class="bg-slate-800/70 rounded-lg p-4">
-            <h3 class="font-semibold mb-1 text-slate-50">Study tip for you</h3>
-            <p id="result-tip">
-              <!-- Filled by JS with a simple tip based on type -->
-            </p>
+            <h3 class="font-semibold mb-1 text-slate-50">Learning tip for you</h3>
+            <p id="result-tip"></p>
           </div>
           <div class="bg-slate-800/70 rounded-lg p-4">
-            <h3 class="font-semibold mb-1 text-slate-50">How to use this insight</h3>
+            <h3 class="font-semibold mb-1 text-slate-50">How to use this in your role</h3>
             <p class="text-slate-200">
-              Share this result with your teacher, mentor, or parent so that
-              they can support you with tasks that match your style.
+              Use this profile to design your learning plan, choose projects that fit your strengths,
+              and communicate your style to your leader, coach, or team.
             </p>
           </div>
         </div>
@@ -137,13 +133,13 @@
         <!-- Simple sharing instructions and placeholder button -->
         <div class="mb-6">
           <h3 class="font-semibold text-sm sm:text-base mb-2 text-slate-50">
-            Want to share your result?
+            Share your result with your mentor or team
           </h3>
           <p class="text-xs sm:text-sm text-slate-300 mb-3">
-            You can take a screenshot of this page and share it, or your developer can add a social share button here.
+            You can take a screenshot of this page and share it in your PM community or with your manager.
+            A developer can also connect the button below to real social sharing.
           </p>
 
-          <!-- This button is just a visual placeholder -->
           <button
             id="share-btn"
             class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-400 text-emerald-300 text-xs sm:text-sm hover:bg-emerald-500/10 transition"
@@ -155,17 +151,17 @@
             Developer note:
 
             To implement real sharing you could use:
-            1. The Web Share API (for mobile or supported browsers):
+            1. The Web Share API (for supported browsers):
 
-              if (navigator.share) {
-                navigator.share({
-                  title: 'My Learning Style Result',
-                  text: 'I got "Creative Thinker" on this quiz',
-                  url: window.location.href
-                });
-              }
+               if (navigator.share) {
+                 navigator.share({
+                   title: 'My PM Strengths & Learning Style',
+                   text: 'I discovered my dominant PM style on this quiz',
+                   url: window.location.href
+                 });
+               }
 
-            2. Or use a link to a social share URL, for example Twitter or WhatsApp.
+            2. Or build specific links for WhatsApp, LinkedIn, etc.
           -->
         </div>
 
@@ -188,247 +184,246 @@
   </div>
 
   <script>
-    // Strength types and their descriptions
+    // Strength types and descriptions, tuned for project managers
     const strengthTypes = {
       creative: {
         name: "Creative Thinker",
         description:
-          "Focuses on generating new ideas and innovative solutions.",
+          "You lead with possibilities, patterns, and new ways of solving problems. You enjoy shaping vision, designing new approaches, and challenging the status quo in projects.",
         tip:
-          "Use mind maps, brainstorming, and visual notes. Turn concepts into sketches, diagrams, or stories."
+          "Anchor your creativity with lightweight structure. Use visual roadmaps, journey maps, and discovery workshops. Pair with a detail focused partner for execution, while you focus on ideation, problem framing, and stakeholder inspiration."
       },
       analytical: {
         name: "Analytical Learner",
         description:
-          "Thrives on understanding details, data, and logical processes.",
+          "You lead with logic, structure, and evidence. You enjoy breaking work into parts, analyzing risks, and making decisions based on data and models.",
         tip:
-          "Break big problems into smaller steps. Use checklists, worked examples, and practice questions."
+          "Invest in tools that help you see patterns, such as burndown charts, dashboards, and risk heat maps. Balance analysis with small experiments, so you do not get stuck waiting for perfect data. Share insights in simple visual formats so stakeholders can follow you."
       },
       collaborative: {
         name: "Collaborative Communicator",
         description:
-          "Excels in teamwork, leadership, and interpersonal communication.",
+          "You lead through relationships, facilitation, and influence. You enjoy aligning stakeholders, removing conflict, and turning diverse views into shared decisions.",
         tip:
-          "Study with friends, discuss concepts, and explain topics to others to deepen understanding."
+          "Use your communication strength to create regular feedback loops like check in calls, showcases, and retros. Learn lightweight frameworks for negotiation and conflict resolution. Partner with a detail oriented colleague to ensure decisions are documented and tracked."
       },
       organized: {
         name: "Organized Executor",
         description:
-          "Detail oriented, skilled at planning, timing, and completing tasks.",
+          "You lead by turning plans into actions. You enjoy creating structure, tracking progress, and driving work to closure with discipline and clarity.",
         tip:
-          "Use planners, to do lists, and clear timelines. Set small deadlines and track your progress."
+          "Lean into tools that make execution visible, such as Kanban boards, RAID logs, and milestone trackers. Practice saying no or not now to protect focus. Add short reflection time after each milestone to capture lessons, not just deliverables."
       }
     };
 
-    // Placeholder questions (10 total)
-    // Each option maps to one of the strength types
+    // Updated questions for project managers
     const questions = [
       {
-        text: "When you start a new school project, what excites you the most?",
+        text: "A new strategic project is approved with limited clarity. What is the first thing you naturally want to do as the project manager?",
         options: [
           {
-            text: "Thinking of unique and creative ideas for the project",
+            text: "Explore possibilities and shape a compelling vision for what this project could become.",
             type: "creative"
           },
           {
-            text: "Researching facts, data, and how things work",
+            text: "Gather data, clarify scope, and study constraints before moving forward.",
             type: "analytical"
           },
           {
-            text: "Planning it with classmates and sharing tasks",
+            text: "Talk to key stakeholders to understand their expectations and build alignment.",
             type: "collaborative"
           },
           {
-            text: "Organizing the steps, timeline, and materials needed",
+            text: "Create a high level plan, milestones, and a simple execution roadmap.",
             type: "organized"
           }
         ]
       },
       {
-        text: "In class, you remember best when the teacher",
+        text: "When a project hits a major roadblock, your first instinct is to:",
         options: [
           {
-            text: "Uses pictures, stories, or creative activities",
+            text: "Rethink the approach and look for an innovative, non-standard solution.",
             type: "creative"
           },
           {
-            text: "Explains each step in detail with clear logic",
+            text: "Analyze the root cause of the problem using data and process maps.",
             type: "analytical"
           },
           {
-            text: "Encourages group discussions and presentations",
+            text: "Facilitate a meeting with the team to brainstorm and agree on the next steps.",
             type: "collaborative"
           },
           {
-            text: "Gives structured notes, summaries, and routines",
+            text: "Update the risk log, adjust the schedule, and re-prioritize tasks.",
             type: "organized"
           }
         ]
       },
       {
-        text: "When you face a difficult problem, you usually",
+        text: "You are learning a new project management methodology (e.g., Agile, Waterfall). You learn best by:",
         options: [
           {
-            text: "Look for a new or unusual way to solve it",
+            text: "Seeing how the principles connect to the bigger picture and future trends.",
             type: "creative"
           },
           {
-            text: "Analyze the problem slowly and carefully",
+            text: "Reading the official guide, understanding the logic, and studying case studies.",
             type: "analytical"
           },
           {
-            text: "Ask others what they think and talk it through",
+            text: "Discussing it with other practitioners and sharing experiences.",
             type: "collaborative"
           },
           {
-            text: "Make a mini plan and solve it step by step",
+            text: "Creating a checklist of all the steps and trying it out on a small project.",
             type: "organized"
           }
         ]
       },
       {
-        text: "Which activity sounds most fun to you?",
+        text: "In a team meeting, you are most likely to contribute by:",
         options: [
           {
-            text: "Designing posters, comics, or videos",
+            text: "Suggesting a completely new idea or a different way to frame the discussion.",
             type: "creative"
           },
           {
-            text: "Solving puzzles, math problems, or quizzes",
+            text: "Asking clarifying questions to ensure all facts and assumptions are correct.",
             type: "analytical"
           },
           {
-            text: "Leading a group game or class presentation",
+            text: "Making sure everyone's voice is heard and mediating any disagreements.",
             type: "collaborative"
           },
           {
-            text: "Setting up a schedule for your day or week",
+            text: "Summarizing the decisions made and outlining the next action items.",
             type: "organized"
           }
         ]
       },
       {
-        text: "Your teacher gives a long homework assignment. You first",
+        text: "A key stakeholder is unhappy with the project's progress. Your preferred way to handle this is to:",
         options: [
           {
-            text: "Think of a fun or creative way to complete it",
+            text: "Show them a visual representation of the project's future potential to inspire confidence.",
             type: "creative"
           },
           {
-            text: "Read the instructions carefully and plan how to do it",
+            text: "Present a detailed report with metrics and data to explain the current status objectively.",
             type: "analytical"
           },
           {
-            text: "Ask your friends how they are going to do it",
+            text: "Schedule a one-on-one conversation to listen to their concerns and build rapport.",
             type: "collaborative"
           },
           {
-            text: "Split it into smaller tasks and set times for each",
+            text: "Provide a revised, detailed plan with clear recovery steps and milestones.",
             type: "organized"
           }
         ]
       },
       {
-        text: "In a group project, other people usually see you as the one who",
+        text: "Which project artifact do you naturally spend the most time refining?",
         options: [
           {
-            text: "Brings fresh ideas and artistic touches",
+            text: "The project vision, mission statement, or concept design.",
             type: "creative"
           },
           {
-            text: "Checks facts and makes sure things are correct",
+            text: "The risk register, dependency map, or technical specifications.",
             type: "analytical"
           },
           {
-            text: "Keeps everyone talking, involved, and motivated",
+            text: "The stakeholder communication plan or team charter.",
             type: "collaborative"
           },
           {
-            text: "Keeps track of deadlines and who does what",
+            text: "The detailed project schedule or the task breakdown structure (WBS).",
             type: "organized"
           }
         ]
       },
       {
-        text: "When studying for a test, you prefer to",
+        text: "When you receive feedback on your performance, you value feedback that:",
         options: [
           {
-            text: "Use colors, diagrams, or creative notes",
+            text: "Challenges you to think bigger and explore new areas of growth.",
             type: "creative"
           },
           {
-            text: "Practice problems and understand reasons behind answers",
+            text: "Is specific, evidence-based, and logically explains areas for improvement.",
             type: "analytical"
           },
           {
-            text: "Study with a partner and quiz each other",
+            text: "Focuses on your impact on the team and your collaboration skills.",
             type: "collaborative"
           },
           {
-            text: "Create a study timetable and follow it",
+            text: "Gives you clear, actionable steps and a measurable goal to work toward.",
             type: "organized"
           }
         ]
       },
       {
-        text: "If you could design your perfect classroom, it would",
+        text: "You are asked to lead a new team. Your first priority is to:",
         options: [
           {
-            text: "Have art corners, idea walls, and creative spaces",
+            text: "Inspire them with a compelling vision and a sense of purpose.",
             type: "creative"
           },
           {
-            text: "Have clear charts, models, and reference materials",
+            text: "Establish clear roles, responsibilities, and decision-making processes.",
             type: "analytical"
           },
           {
-            text: "Have circular seating to talk and work in teams",
+            text: "Organize a team-building activity to understand individual strengths and build trust.",
             type: "collaborative"
           },
           {
-            text: "Have labeled shelves, clear rules, and tidy spaces",
+            text: "Set up the project management tools and define the team's operating rhythm.",
             type: "organized"
           }
         ]
       },
       {
-        text: "When instructions are confusing, you usually",
+        text: "A project is nearing completion. What is your focus in the final stages?",
         options: [
           {
-            text: "Try to reimagine or rephrase them in your own way",
+            text: "Capturing the lessons learned about innovation and new opportunities for the next project.",
             type: "creative"
           },
           {
-            text: "Ask for a step by step explanation",
+            text: "Conducting a final audit to ensure all requirements and quality standards have been met.",
             type: "analytical"
           },
           {
-            text: "Discuss them with classmates to understand",
+            text: "Celebrating the team's success and ensuring a smooth handover to the operations team.",
             type: "collaborative"
           },
           {
-            text: "Write them down in order until they look clear",
+            text: "Closing out all contracts, archiving documents, and completing the final report.",
             type: "organized"
           }
         ]
       },
       {
-        text: "Which compliment would make you happiest?",
+        text: "Which description best fits your personal style of learning new skills?",
         options: [
           {
-            text: "You have such amazing ideas",
+            text: "I prefer to experiment and learn by doing, even if I make mistakes along the way.",
             type: "creative"
           },
           {
-            text: "You understand things very deeply",
+            text: "I prefer structured courses, reading detailed documentation, and practicing exercises.",
             type: "analytical"
           },
           {
-            text: "You work with others so well",
+            text: "I prefer mentoring, coaching, and learning from the experience of others.",
             type: "collaborative"
           },
           {
-            text: "You are very reliable and organized",
+            text: "I prefer to follow a clear, step-by-step guide or certification path.",
             type: "organized"
           }
         ]
@@ -506,7 +501,7 @@
       // Clear previous answers
       answersContainer.innerHTML = "";
 
-      q.options.forEach(function (option, index) {
+      q.options.forEach(function (option) {
         const btn = document.createElement("button");
         btn.className =
           "w-full text-left px-4 py-3 rounded-lg border border-slate-500 bg-slate-800/80 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm sm:text-base transition";
@@ -520,34 +515,26 @@
         answersContainer.appendChild(btn);
       });
 
-      // Back button disabled on first question
       backBtn.disabled = currentQuestionIndex === 0;
     }
 
     function handleAnswer(type) {
-      // Increase score for chosen type
       scores[type] += 1;
 
-      // Move to next question or finish
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex += 1;
         renderQuestion();
       } else {
-        // Set progress bar to 100 percent at the end
         progressBar.style.width = "100%";
         showResults();
       }
     }
 
     function goBack() {
-      if (currentQuestionIndex === 0) {
-        return;
-      }
+      if (currentQuestionIndex === 0) return;
 
-      // Optional: You could track answers history to fully adjust scores when going back.
-      // Simplest version: just move back without changing scores.
-      // For more accuracy, store chosen answers in an array and subtract the score when moving back.
-
+      // Note: for a more precise model, you can store chosen answers in an array
+      // and adjust scores when going back. For now, this is a simple visual back.
       currentQuestionIndex -= 1;
       renderQuestion();
     }
@@ -564,7 +551,6 @@
     }
 
     function calculateResultType() {
-      // Tie rule: show the first type that reaches the highest score based on this order
       const order = ["creative", "analytical", "collaborative", "organized"];
       let bestType = order[0];
       let bestScore = scores[bestType];
@@ -592,16 +578,16 @@
       const resultData = strengthTypes[resultTypeKey];
 
       const shareText =
-        "My learning style result: " +
+        "My PM strengths and learning style result: " +
         resultData.name +
         " - " +
         resultData.description;
 
-      // This is just a demo. In a real app you would call navigator.share or open a social share link.
+      // Demo only. Replace with navigator.share or social share links in a real app.
       alert(
         "Example share text:\n\n" +
           shareText +
-          "\n\nYour developer can connect this button to real social sharing."
+          "\n\nA developer can connect this button to LinkedIn, WhatsApp, or email."
       );
     }
 
