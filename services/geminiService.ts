@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { PersonalityType } from "../types";
 
-const apiKey = process.env.API_KEY || '';
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 export const getAIStudyTips = async (personalityType: PersonalityType, description: string): Promise<string> => {
   if (!apiKey) {
